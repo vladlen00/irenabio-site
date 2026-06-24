@@ -1,0 +1,124 @@
+/* Женский биохакинг с Иреной Пол - единый минимальный CSS.
+   Без внешних зависимостей и шрифтов, только системные шрифты.
+   Мобайл-фёрст, мягкая женственная палитра, не медицинский стиль. */
+
+:root {
+  --bg: #fcf8f5;
+  --surface: #ffffff;
+  --text: #3d3333;
+  --muted: #8a7d7d;
+  --accent: #c98a8a;
+  --accent-deep: #b06f72;
+  --border: #efe3dd;
+  --shadow: 0 8px 28px rgba(176, 111, 114, 0.10);
+  --radius: 18px;
+  --maxw: 960px;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent-deep); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 20px; }
+
+/* Шапка */
+.site-header {
+  padding: 22px 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-mark {
+  width: 40px; height: 40px; border-radius: 12px; flex: 0 0 auto;
+  background: linear-gradient(135deg, #d9a7a0, #c98a8a);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 700; font-size: 18px;
+}
+.brand-name { font-size: 17px; font-weight: 700; letter-spacing: 0.01em; }
+
+/* Герой */
+.hero { padding: 56px 0 24px; text-align: center; }
+.hero h1 { font-size: 30px; line-height: 1.25; margin: 0 0 16px; font-weight: 700; }
+.hero p { font-size: 17px; color: var(--muted); max-width: 640px; margin: 0 auto; }
+
+/* Преимущества */
+.features { padding: 28px 0; }
+.features-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+.feature {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px 22px;
+}
+.feature h3 { margin: 0 0 6px; font-size: 16px; }
+.feature p { margin: 0; color: var(--muted); font-size: 15px; }
+
+/* Тарифы */
+.pricing { padding: 32px 0 12px; text-align: center; }
+.pricing h2 { font-size: 24px; margin: 0 0 8px; }
+.pricing .lead { color: var(--muted); margin: 0 0 28px; }
+.plans { display: grid; grid-template-columns: 1fr; gap: 18px; }
+.plan {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 26px 22px; box-shadow: var(--shadow);
+  display: flex; flex-direction: column; align-items: center;
+}
+.plan.featured { border-color: var(--accent); }
+.plan .tag {
+  font-size: 12px; font-weight: 700; color: var(--accent-deep);
+  text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;
+}
+.plan .period { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+.plan .price { font-size: 34px; font-weight: 800; color: var(--text); }
+.plan .price span { font-size: 16px; font-weight: 600; color: var(--muted); }
+.plan .note { font-size: 13px; color: var(--muted); margin: 8px 0 18px; }
+.btn {
+  display: inline-block; padding: 12px 26px; border-radius: 14px;
+  background: linear-gradient(135deg, #d9a7a0, #c98a8a); color: #fff;
+  font-weight: 700; font-size: 15px; border: none; cursor: pointer;
+}
+.btn:hover { text-decoration: none; filter: brightness(0.97); }
+
+/* Как оформить */
+.how { padding: 36px 0; text-align: center; }
+.how h2 { font-size: 22px; margin: 0 0 10px; }
+.how p { color: var(--muted); max-width: 620px; margin: 0 auto; }
+
+/* Футер */
+.site-footer {
+  margin-top: 24px; border-top: 1px solid var(--border);
+  background: var(--surface); padding: 30px 0 40px;
+}
+.site-footer .legal-links { margin: 0 0 16px; }
+.site-footer .legal-links a { margin-right: 18px; font-size: 14px; }
+.seller { color: var(--muted); font-size: 13px; line-height: 1.7; }
+.seller strong { color: var(--text); font-weight: 600; }
+
+/* Юридические страницы */
+.legal { padding: 40px 0 56px; }
+.legal .doc { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 24px; }
+.legal h1 { font-size: 24px; margin: 0 0 6px; }
+.legal .updated { color: var(--muted); font-size: 13px; margin: 0 0 24px; }
+.legal h2 { font-size: 18px; margin: 26px 0 8px; }
+.legal h3 { font-size: 16px; margin: 18px 0 6px; }
+.legal p, .legal li { font-size: 15px; }
+.legal ul, .legal ol { padding-left: 22px; }
+.legal .back { display: inline-block; margin-bottom: 18px; font-size: 14px; }
+.legal .req { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; font-size: 14px; line-height: 1.7; }
+
+@media (min-width: 720px) {
+  .hero h1 { font-size: 38px; }
+  .features-grid { grid-template-columns: repeat(3, 1fr); }
+  .plans { grid-template-columns: repeat(3, 1fr); align-items: stretch; }
+}
