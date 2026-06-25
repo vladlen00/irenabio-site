@@ -90,6 +90,24 @@ a:hover { text-decoration: underline; }
 }
 .btn:hover { text-decoration: none; filter: brightness(0.97); }
 
+/* Об авторе */
+.author { padding: 32px 0; }
+.author h2 { font-size: 24px; margin: 0 0 20px; text-align: center; }
+.author-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: 24px; display: flex; flex-direction: column;
+  align-items: center; gap: 22px;
+}
+.author-photo {
+  width: 200px; height: 250px; flex: 0 0 auto;
+  object-fit: cover; object-position: center top;
+  border-radius: 20px; border: 1px solid var(--border);
+}
+.author-text { width: 100%; }
+.author-text p { margin: 0 0 14px; color: #5f5353; font-size: 15px; }
+.author-text p:last-child { margin-bottom: 0; }
+
 /* Как оформить */
 .how { padding: 36px 0; text-align: center; }
 .how h2 { font-size: 22px; margin: 0 0 10px; }
@@ -121,4 +139,6 @@ a:hover { text-decoration: underline; }
   .hero h1 { font-size: 38px; }
   .features-grid { grid-template-columns: repeat(3, 1fr); }
   .plans { grid-template-columns: repeat(3, 1fr); align-items: stretch; }
+  .author-card { flex-direction: row; align-items: flex-start; padding: 28px 30px; }
+  .author-photo { width: 220px; height: 280px; }
 }
