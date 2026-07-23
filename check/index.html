@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Проверка загрузки</title>
+  <style>
+    :root{ --bg:#fcf8f5; --card:#fff; --text:#3d3333; --muted:#8a7d7d; --line:#efe3dd;
+           --accent:#c98a8a; --accent-deep:#b06f72; --ok:#3a8f5f; --bad:#c25b5b; }
+    *{ box-sizing:border-box; }
+    body{ margin:0; background:var(--bg); color:var(--text);
+          font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+          -webkit-font-smoothing:antialiased; }
+    .wrap{ max-width:460px; margin:0 auto; padding:32px 20px 48px; }
+    h1{ font-size:22px; font-weight:800; margin:0 0 6px; text-align:center; }
+    .sub{ color:var(--muted); text-align:center; margin:0 0 24px; font-size:14px; }
+    .card{ background:var(--card); border:1px solid var(--line); border-radius:16px;
+           padding:8px 16px; margin-bottom:20px; }
+    .row{ display:flex; align-items:center; justify-content:space-between;
+          padding:16px 2px; border-bottom:1px solid var(--line); }
+    .row:last-child{ border-bottom:0; }
+    .rname{ font-weight:600; font-size:16px; }
+    .rstat{ display:flex; align-items:center; gap:8px; font-variant-numeric:tabular-nums; }
+    .rms{ color:var(--muted); font-size:13px; min-width:52px; text-align:right; }
+    .dot{ width:12px; height:12px; border-radius:50%; background:var(--line); flex:0 0 auto; }
+    .dot.run{ background:var(--accent); animation:pulse 1s infinite ease-in-out; }
+    .dot.ok{ background:var(--ok); }
+    .dot.bad{ background:var(--bad); }
+    @keyframes pulse{ 0%,100%{opacity:.4;transform:scale(.8);} 50%{opacity:1;transform:scale(1);} }
+    .icon{ font-size:16px; font-weight:800; width:16px; text-align:center; }
+    .icon.ok{ color:var(--ok); } .icon.bad{ color:var(--bad); }
+    .code-label{ text-align:center; color:var(--muted); font-size:13px; margin:0 0 8px; }
+    .code{ font-family:ui-monospace,Menlo,Consolas,monospace; font-size:15px; font-weight:700;
+           text-align:center; background:#fff; border:1.5px dashed var(--accent); border-radius:12px;
+           padding:14px; color:var(--accent-deep); user-select:all; -webkit-user-select:all;
+           word-break:break-all; }
+    .btn{ display:block; width:100%; margin-top:20px; padding:14px; border:0; border-radius:14px;
+          font-size:16px; font-weight:700; color:#fff; background:var(--accent);
+          background:linear-gradient(90deg,#d9a7a0,#c98a8a); cursor:pointer; }
+    .foot{ text-align:center; color:var(--muted); font-size:12px; margin-top:22px; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Проверка загрузки</h1>
+    <p class="sub">Подождите несколько секунд — идёт проверка соединения.</p>
+
+    <div class="card" id="rows">
+      <div class="row" data-k="1">
+        <span class="rname">Проверка 1</span>
+        <span class="rstat"><span class="rms"></span><span class="icon"></span><span class="dot"></span></span>
+      </div>
+      <div class="row" data-k="2">
+        <span class="rname">Проверка 2</span>
+        <span class="rstat"><span class="rms"></span><span class="icon"></span><span class="dot"></span></span>
+      </div>
+      <div class="row" data-k="3">
+        <span class="rname">Проверка 3</span>
+        <span class="rstat"><span class="rms"></span><span class="icon"></span><span class="dot"></span></span>
+      </div>
+    </div>
+
+    <p class="code-label">Когда все проверки завершатся — пришлите этот код:</p>
+    <div class="code" id="code">…</div>
+    <button class="btn" id="again" type="button" hidden>Проверить ещё раз</button>
+    <p class="foot">Эта страница ничего не сохраняет и не устанавливает.</p>
+  </main>
+
+  <script>
+    // Цели скрыты в коде (в видимом тексте — только "Проверка N").
+    // 1 = auth-путь бэкенда, 2 = функции бэкенда, 3 = контроль (наш домен = связь есть).
+    var SB = "https://kjzxrpwqyyjcykwbqskn.supabase.co";
+    var TIMEOUT_MS = 8000;
+    function targets(){
+      var bust = "?_=" + Date.now();
+      return [
+        { k:1, url: SB + "/auth/v1/health" + bust },
+        { k:2, url: SB + "/functions/v1/verify-access-web" + bust },
+        { k:3, url: location.origin + "/check/" + bust }
+      ];
+    }
+
+    function el(k){ return document.querySelector('.row[data-k="'+k+'"]'); }
+    function setRun(k){
+      var r = el(k); r.querySelector('.dot').className = 'dot run';
+      r.querySelector('.icon').textContent = ''; r.querySelector('.rms').textContent = '';
+    }
+    function setDone(k, ok, ms){
+      var r = el(k);
+      r.querySelector('.dot').className = 'dot ' + (ok ? 'ok' : 'bad');
+      var ic = r.querySelector('.icon'); ic.className = 'icon ' + (ok ? 'ok' : 'bad');
+      ic.textContent = ok ? '✓' : '✗';
+      r.querySelector('.rms').textContent = ms + ' мс';
+    }
+
+    function probe(url){
+      var t0 = performance.now();
+      var ctrl = new AbortController();
+      var to = setTimeout(function(){ ctrl.abort(); }, TIMEOUT_MS);
+      return fetch(url, { mode:'no-cors', cache:'no-store', signal: ctrl.signal })
+        .then(function(){ clearTimeout(to); return { ok:true,  ms: Math.round(performance.now()-t0) }; })
+        .catch(function(){ clearTimeout(to); return { ok:false, ms: Math.round(performance.now()-t0) }; });
+    }
+
+    function run(){
+      var again = document.getElementById('again');
+      var codeEl = document.getElementById('code');
+      again.hidden = true; codeEl.textContent = '…';
+      var ts = targets();
+      ts.forEach(function(t){ setRun(t.k); });
+      Promise.all(ts.map(function(t){
+        return probe(t.url).then(function(res){ setDone(t.k, res.ok, res.ms); return { k:t.k, res:res }; });
+      })).then(function(list){
+        list.sort(function(a,b){ return a.k - b.k; });
+        var code = list.map(function(x){
+          return x.k + ':' + (x.res.ok ? 'OK' : 'FAIL') + '/' + x.res.ms;
+        }).join('  ');
+        codeEl.textContent = code;
+        again.hidden = false;
+      });
+    }
+
+    document.getElementById('again').addEventListener('click', run);
+    run();
+  </script>
+</body>
+</html>
