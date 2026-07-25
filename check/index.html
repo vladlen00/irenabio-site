@@ -14,15 +14,18 @@
           -webkit-font-smoothing:antialiased; }
     .wrap{ max-width:460px; margin:0 auto; padding:32px 20px 48px; }
     h1{ font-size:22px; font-weight:800; margin:0 0 6px; text-align:center; }
-    .sub{ color:var(--muted); text-align:center; margin:0 0 24px; font-size:14px; }
+    .sub{ color:var(--muted); text-align:center; margin:0 0 14px; font-size:14px; }
+    .note{ color:var(--muted); text-align:center; margin:0 0 24px; font-size:13px; line-height:1.45; }
     .card{ background:var(--card); border:1px solid var(--line); border-radius:16px;
            padding:8px 16px; margin-bottom:20px; }
-    .row{ display:flex; align-items:center; justify-content:space-between;
+    .row{ display:flex; align-items:center; justify-content:space-between; gap:12px;
           padding:16px 2px; border-bottom:1px solid var(--line); }
     .row:last-child{ border-bottom:0; }
-    .rname{ font-weight:600; font-size:16px; }
-    .rstat{ display:flex; align-items:center; gap:8px; font-variant-numeric:tabular-nums; }
-    .rms{ color:var(--muted); font-size:13px; min-width:52px; text-align:right; }
+    .rleft{ min-width:0; }
+    .rname{ font-weight:600; font-size:16px; display:block; }
+    .rdet{ color:var(--muted); font-size:12.5px; line-height:1.4; display:block; margin-top:3px;
+           font-variant-numeric:tabular-nums; }
+    .rstat{ display:flex; align-items:center; gap:8px; flex:0 0 auto; }
     .dot{ width:12px; height:12px; border-radius:50%; background:var(--line); flex:0 0 auto; }
     .dot.run{ background:var(--accent); animation:pulse 1s infinite ease-in-out; }
     .dot.ok{ background:var(--ok); }
@@ -34,90 +37,156 @@
     .code{ font-family:ui-monospace,Menlo,Consolas,monospace; font-size:15px; font-weight:700;
            text-align:center; background:#fff; border:1.5px dashed var(--accent); border-radius:12px;
            padding:14px; color:var(--accent-deep); user-select:all; -webkit-user-select:all;
-           word-break:break-all; }
+           word-break:break-all; line-height:1.6; }
     .btn{ display:block; width:100%; margin-top:20px; padding:14px; border:0; border-radius:14px;
           font-size:16px; font-weight:700; color:#fff; background:var(--accent);
           background:linear-gradient(90deg,#d9a7a0,#c98a8a); cursor:pointer; }
+    .btn[disabled]{ opacity:.55; }
     .foot{ text-align:center; color:var(--muted); font-size:12px; margin-top:22px; }
   </style>
 </head>
 <body>
   <main class="wrap">
     <h1>Проверка загрузки</h1>
-    <p class="sub">Подождите несколько секунд — идёт проверка соединения.</p>
+    <p class="sub">Проверка занимает до 30 секунд. Не закрывайте страницу, пока она идёт.</p>
+    <p class="note">Несколько попыток - это нормально. Связь бывает неровной, и повтор обычно проходит.
+      Промежуточная неудача не означает, что что-то сломано.</p>
 
     <div class="card" id="rows">
       <div class="row" data-k="1">
-        <span class="rname">Проверка 1</span>
-        <span class="rstat"><span class="rms"></span><span class="icon"></span><span class="dot"></span></span>
+        <span class="rleft"><span class="rname">Проверка 1</span><span class="rdet"></span></span>
+        <span class="rstat"><span class="icon"></span><span class="dot"></span></span>
       </div>
       <div class="row" data-k="2">
-        <span class="rname">Проверка 2</span>
-        <span class="rstat"><span class="rms"></span><span class="icon"></span><span class="dot"></span></span>
+        <span class="rleft"><span class="rname">Проверка 2</span><span class="rdet"></span></span>
+        <span class="rstat"><span class="icon"></span><span class="dot"></span></span>
       </div>
       <div class="row" data-k="3">
-        <span class="rname">Проверка 3</span>
-        <span class="rstat"><span class="rms"></span><span class="icon"></span><span class="dot"></span></span>
+        <span class="rleft"><span class="rname">Проверка 3</span><span class="rdet"></span></span>
+        <span class="rstat"><span class="icon"></span><span class="dot"></span></span>
       </div>
     </div>
 
-    <p class="code-label">Когда все проверки завершатся — пришлите этот код:</p>
+    <p class="code-label">Когда все проверки завершатся, пришлите этот код:</p>
     <div class="code" id="code">…</div>
-    <button class="btn" id="again" type="button" hidden>Проверить ещё раз</button>
+    <button class="btn" id="again" type="button" disabled>Проверить ещё раз</button>
     <p class="foot">Эта страница ничего не сохраняет и не устанавливает.</p>
   </main>
 
   <script>
-    // Цели скрыты в коде (в видимом тексте — только "Проверка N").
-    // 1 = auth-путь бэкенда, 2 = функции бэкенда, 3 = контроль (наш домен = связь есть).
+    // Прибор, а не индикатор. Меряем СТАБИЛЬНОСТЬ прямого пути, поэтому важен не факт
+    // "дошло/не дошло", а с какой попытки дошло и за сколько миллисекунд каждая.
+    //
+    // Параметры совпадают с боевым sbFetch в app.irenabio.com, чтобы цифры отсюда можно
+    // было переносить на поведение приложения один в один.
+    //
+    // ВАЖНО про no-cors: его здесь нет. Обе внешние цели отдают CORS-заголовки для
+    // https://irenabio.com, поэтому статус ответа виден. Прошлая версия страницы читать
+    // ответ не могла и любой обрыв показывала как провал - отсюда и брались красные
+    // кресты в момент, когда сервер по логам отвечал за 85 мс.
+    //
+    // Цели скрыты в видимом тексте (там только "Проверка N"):
+    //   1 = auth-путь бэкенда, 2 = функции бэкенда, 3 = контроль (наш же домен).
     var SB = "https://kjzxrpwqyyjcykwbqskn.supabase.co";
-    var TIMEOUT_MS = 8000;
+    var TIMEOUT_MS = 8000;          // столько же, сколько даёт себе приложение
+    var MAX_ATTEMPTS = 3;
+    var RETRY_DELAYS_MS = [1000, 2000];
+
     function targets(){
-      var bust = "?_=" + Date.now();
       return [
-        { k:1, url: SB + "/auth/v1/health" + bust },
-        { k:2, url: SB + "/functions/v1/verify-access-web" + bust },
-        { k:3, url: location.origin + "/check/" + bust }
+        { k:1, url: SB + "/auth/v1/health" },
+        { k:2, url: SB + "/functions/v1/verify-access-web" },
+        { k:3, url: location.origin + "/check/" }
       ];
     }
 
     function el(k){ return document.querySelector('.row[data-k="'+k+'"]'); }
-    function setRun(k){
-      var r = el(k); r.querySelector('.dot').className = 'dot run';
-      r.querySelector('.icon').textContent = ''; r.querySelector('.rms').textContent = '';
-    }
-    function setDone(k, ok, ms){
-      var r = el(k);
-      r.querySelector('.dot').className = 'dot ' + (ok ? 'ok' : 'bad');
-      var ic = r.querySelector('.icon'); ic.className = 'icon ' + (ok ? 'ok' : 'bad');
-      ic.textContent = ok ? '✓' : '✗';
-      r.querySelector('.rms').textContent = ms + ' мс';
+    function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+
+    function setRunning(k, n){
+      var row = el(k);
+      row.querySelector('.dot').className = 'dot run';
+      row.querySelector('.icon').textContent = '';
+      row.querySelector('.rdet').textContent = 'попытка ' + n + ' из ' + MAX_ATTEMPTS + '...';
     }
 
-    function probe(url){
+    // Одна попытка. Сервер ОТВЕТИЛ - значит запрос доехал и вернулся, каким бы ни был
+    // статус. 401 у auth-проверки и 405 у функции - это штатные ответы на пустой запрос,
+    // они доказывают достижимость. Нам нужна связь, а не бизнес-логика.
+    function attempt(url){
       var t0 = performance.now();
       var ctrl = new AbortController();
-      var to = setTimeout(function(){ ctrl.abort(); }, TIMEOUT_MS);
-      return fetch(url, { mode:'no-cors', cache:'no-store', signal: ctrl.signal })
-        .then(function(){ clearTimeout(to); return { ok:true,  ms: Math.round(performance.now()-t0) }; })
-        .catch(function(){ clearTimeout(to); return { ok:false, ms: Math.round(performance.now()-t0) }; });
+      var timedOut = false;
+      var to = setTimeout(function(){ timedOut = true; ctrl.abort(); }, TIMEOUT_MS);
+      var bust = (url.indexOf('?') < 0 ? '?' : '&') + '_=' + Date.now() + '-' + Math.random().toString(36).slice(2);
+      return fetch(url + bust, { cache:'no-store', signal: ctrl.signal })
+        .then(function(res){
+          clearTimeout(to);
+          return { ok:true, ms: Math.round(performance.now() - t0), status: res.status };
+        })
+        .catch(function(){
+          clearTimeout(to);
+          // Браузер намеренно не раскрывает, что именно не сложилось: сеть, DNS, TLS или
+          // отказ на той стороне. Единственное, что мы знаем точно, - сработал ли наш таймаут.
+          return { ok:false, ms: Math.round(performance.now() - t0),
+                   reason: timedOut ? ('таймаут ' + (TIMEOUT_MS/1000) + ' с') : 'ответа нет, причина не видна' };
+        });
+    }
+
+    // До трёх попыток с паузами 1с и 2с. Возвращает ВСЕ времена, а не только последнее.
+    function runCheck(t){
+      var times = [];
+      function step(n){
+        setRunning(t.k, n);
+        return attempt(t.url).then(function(r){
+          times.push(r.ms);
+          if (r.ok) return { ok:true, used:n, times:times, status:r.status };
+          if (n < MAX_ATTEMPTS) {
+            return sleep(RETRY_DELAYS_MS[n-1]).then(function(){ return step(n+1); });
+          }
+          return { ok:false, used:n, times:times, reason:r.reason };
+        });
+      }
+      return step(1);
+    }
+
+    // "с 1-й", "со 2-й", "с 3-й"
+    function fromNth(n){ return (n === 2 ? 'со ' : 'с ') + n + '-й попытки'; }
+
+    function setDone(k, r){
+      var row = el(k);
+      row.querySelector('.dot').className = 'dot ' + (r.ok ? 'ok' : 'bad');
+      var ic = row.querySelector('.icon');
+      ic.className = 'icon ' + (r.ok ? 'ok' : 'bad');
+      ic.textContent = r.ok ? '✓' : '✗';
+      var parts = [];
+      parts.push(r.ok ? ('прошло ' + fromNth(r.used)) : ('не прошло за ' + MAX_ATTEMPTS));
+      parts.push(r.times.join(', ') + ' мс');
+      // Статус показываем в скобках: сам факт ответа - уже успех, а число нужно нам
+      // для разбора. Без пояснения голое "401" рядом с галочкой пугает.
+      parts.push(r.ok ? ('сервер ответил (' + r.status + ')') : r.reason);
+      row.querySelector('.rdet').textContent = parts.join(' · ');
+    }
+
+    // Код для отправки: все попытки, а не итог.
+    // 1:OK/2/94,412 - проверка 1, прошла со 2-й попытки, времена 94 и 412 мс.
+    function codeFor(k, r){
+      return k + ':' + (r.ok ? 'OK' : 'FAIL') + '/' + r.used + '/' + r.times.join(',');
     }
 
     function run(){
       var again = document.getElementById('again');
       var codeEl = document.getElementById('code');
-      again.hidden = true; codeEl.textContent = '…';
+      again.disabled = true;
+      codeEl.textContent = '…';
       var ts = targets();
-      ts.forEach(function(t){ setRun(t.k); });
+      ts.forEach(function(t){ setRunning(t.k, 1); });
       Promise.all(ts.map(function(t){
-        return probe(t.url).then(function(res){ setDone(t.k, res.ok, res.ms); return { k:t.k, res:res }; });
+        return runCheck(t).then(function(r){ setDone(t.k, r); return { k:t.k, r:r }; });
       })).then(function(list){
         list.sort(function(a,b){ return a.k - b.k; });
-        var code = list.map(function(x){
-          return x.k + ':' + (x.res.ok ? 'OK' : 'FAIL') + '/' + x.res.ms;
-        }).join('  ');
-        codeEl.textContent = code;
-        again.hidden = false;
+        codeEl.textContent = list.map(function(x){ return codeFor(x.k, x.r); }).join('  ');
+        again.disabled = false;
       });
     }
 
