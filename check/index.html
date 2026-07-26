@@ -77,6 +77,22 @@
         <span class="rleft"><span class="rname">Запасной путь 2</span><span class="rdet"></span></span>
         <span class="rstat"><span class="icon"></span><span class="dot"></span></span>
       </div>
+      <div class="row" data-k="6">
+        <span class="rleft"><span class="rname">Проверка 6</span><span class="rdet"></span></span>
+        <span class="rstat"><span class="icon"></span><span class="dot"></span></span>
+      </div>
+      <div class="row" data-k="7">
+        <span class="rleft"><span class="rname">Проверка 7</span><span class="rdet"></span></span>
+        <span class="rstat"><span class="icon"></span><span class="dot"></span></span>
+      </div>
+      <div class="row" data-k="8">
+        <span class="rleft"><span class="rname">Проверка 8</span><span class="rdet"></span></span>
+        <span class="rstat"><span class="icon"></span><span class="dot"></span></span>
+      </div>
+      <div class="row" data-k="9">
+        <span class="rleft"><span class="rname">Проверка 9</span><span class="rdet"></span></span>
+        <span class="rstat"><span class="icon"></span><span class="dot"></span></span>
+      </div>
     </div>
 
     <p class="code-label">Когда все проверки завершатся, пришлите этот код:</p>
@@ -102,9 +118,21 @@
     // Цели скрыты в видимом тексте (там только "Проверка N" и "Запасной путь N"):
     //   1 = auth-путь бэкенда, 2 = функции бэкенда, 3 = контроль (наш же домен),
     //   4 = те же функции бэкенда, но через хостинг приложения (штатный ответ на GET - 405),
-    //   5 = наш узел раздачи медиа в другом дата-центре (адрес проверки живости, 200).
-    // Для 4 и 5 меряем не бизнес-логику, а факт достижимости: 403 и 405 - это успех,
+    //   5 = наш узел раздачи медиа в другом дата-центре (адрес проверки живости, 200),
+    //   6 = библиотека, без которой вход в приложение не собирается вообще (200),
+    //   7 = хостинг мини-приложений (200),
+    //   8 = видео-хостинг, тот же адрес встраивания, что в приложении (403),
+    //   9 = второй узел раздачи звука (403 без подписи).
+    // Для 4-9 меряем не бизнес-логику, а факт достижимости: 403 и 405 - это успех,
     // потому что сервер ответил.
+    //
+    // Цели 6-9 выбраны курлом 26.07.2026 под браузерный User-Agent и Accept text/html,
+    // и КОРНИ ДОМЕНОВ тут не годятся - это проверено, а не предположено:
+    //   vladlen00.github.io/     -> 404 БЕЗ CORS-заголовка -> в браузере провал по CORS;
+    //   kinescope.io/            -> 301 на www.kinescope.com, тоже без CORS.
+    // Оба дали бы ложный провал на живом хосте. Поэтому взяты конкретные адреса,
+    // которые отвечают с Access-Control-Allow-Origin при любой комбинации UA и Accept.
+    // Не подменять их на корни домена.
     //
     // ОСТОРОЖНО с целью 5, проверено курлом 26.07.2026: КОРЕНЬ этого хоста ("/") отдаёт
     // 307 на служебную панель по порту 9001, если User-Agent браузерный - причём при любом
@@ -123,7 +151,11 @@
         { k:2, url: SB + "/functions/v1/verify-access-web" },
         { k:3, url: location.origin + "/check/" },
         { k:4, url: "https://biohack-tracker-blond.vercel.app/sb/functions/v1/verify-access-web" },
-        { k:5, url: "https://cdn.irenabio.com/minio/health/live" }
+        { k:5, url: "https://cdn.irenabio.com/minio/health/live" },
+        { k:6, url: "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" },
+        { k:7, url: "https://vladlen00.github.io/studio/" },
+        { k:8, url: "https://kinescope.io/embed/uubwddwtUe1wCwxekvoSnC" },
+        { k:9, url: "https://s3.twcstorage.ru/irenabio-audio/sprints/test/day1.m4a" }
       ];
     }
 
