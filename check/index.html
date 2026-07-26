@@ -37,11 +37,15 @@
     .code{ font-family:ui-monospace,Menlo,Consolas,monospace; font-size:15px; font-weight:700;
            text-align:center; background:#fff; border:1.5px dashed var(--accent); border-radius:12px;
            padding:14px; color:var(--accent-deep); user-select:all; -webkit-user-select:all;
-           word-break:break-all; line-height:1.6; }
+           overflow-wrap:break-word; line-height:1.6; }
     .btn{ display:block; width:100%; margin-top:20px; padding:14px; border:0; border-radius:14px;
           font-size:16px; font-weight:700; color:#fff; background:var(--accent);
           background:linear-gradient(90deg,#d9a7a0,#c98a8a); cursor:pointer; }
     .btn[disabled]{ opacity:.55; }
+    /* Копирование - действие второе по важности, поэтому без градиента:
+       главной кнопкой на экране остаётся "Проверить ещё раз". */
+    .btn.ghost{ margin-top:12px; background:#fff; color:var(--accent-deep);
+                border:1.5px solid var(--accent); }
     .foot{ text-align:center; color:var(--muted); font-size:12px; margin-top:22px; }
   </style>
 </head>
@@ -65,10 +69,19 @@
         <span class="rleft"><span class="rname">Проверка 3</span><span class="rdet"></span></span>
         <span class="rstat"><span class="icon"></span><span class="dot"></span></span>
       </div>
+      <div class="row" data-k="4">
+        <span class="rleft"><span class="rname">Запасной путь 1</span><span class="rdet"></span></span>
+        <span class="rstat"><span class="icon"></span><span class="dot"></span></span>
+      </div>
+      <div class="row" data-k="5">
+        <span class="rleft"><span class="rname">Запасной путь 2</span><span class="rdet"></span></span>
+        <span class="rstat"><span class="icon"></span><span class="dot"></span></span>
+      </div>
     </div>
 
     <p class="code-label">Когда все проверки завершатся, пришлите этот код:</p>
     <div class="code" id="code">…</div>
+    <button class="btn ghost" id="copy" type="button" disabled>Скопировать код</button>
     <button class="btn" id="again" type="button" disabled>Проверить ещё раз</button>
     <p class="foot">Эта страница ничего не сохраняет и не устанавливает.</p>
   </main>
@@ -80,13 +93,25 @@
     // Параметры совпадают с боевым sbFetch в app.irenabio.com, чтобы цифры отсюда можно
     // было переносить на поведение приложения один в один.
     //
-    // ВАЖНО про no-cors: его здесь нет. Обе внешние цели отдают CORS-заголовки для
-    // https://irenabio.com, поэтому статус ответа виден. Прошлая версия страницы читать
+    // ВАЖНО про no-cors: его здесь нет. Все внешние цели отдают CORS-заголовки для
+    // https://irenabio.com (проверено курлом 26.07.2026: у 1, 2, 4, 5 в ответе есть
+    // Access-Control-Allow-Origin), поэтому статус ответа виден. Прошлая версия читать
     // ответ не могла и любой обрыв показывала как провал - отсюда и брались красные
     // кресты в момент, когда сервер по логам отвечал за 85 мс.
     //
-    // Цели скрыты в видимом тексте (там только "Проверка N"):
-    //   1 = auth-путь бэкенда, 2 = функции бэкенда, 3 = контроль (наш же домен).
+    // Цели скрыты в видимом тексте (там только "Проверка N" и "Запасной путь N"):
+    //   1 = auth-путь бэкенда, 2 = функции бэкенда, 3 = контроль (наш же домен),
+    //   4 = те же функции бэкенда, но через хостинг приложения (штатный ответ на GET - 405),
+    //   5 = наш узел раздачи медиа в другом дата-центре (адрес проверки живости, 200).
+    // Для 4 и 5 меряем не бизнес-логику, а факт достижимости: 403 и 405 - это успех,
+    // потому что сервер ответил.
+    //
+    // ОСТОРОЖНО с целью 5, проверено курлом 26.07.2026: КОРЕНЬ этого хоста ("/") отдаёт
+    // 307 на служебную панель по порту 9001, если User-Agent браузерный - причём при любом
+    // Accept, включая */*, который посылает fetch. Из https-страницы это уход на http,
+    // то есть гарантированный провал и ложный вывод "хост недостижим". Поэтому цель -
+    // адрес проверки живости: он отвечает 200 при любых комбинациях UA и Accept.
+    // Не менять цель 5 на "/" и не убирать этот комментарий.
     var SB = "https://kjzxrpwqyyjcykwbqskn.supabase.co";
     var TIMEOUT_MS = 8000;          // столько же, сколько даёт себе приложение
     var MAX_ATTEMPTS = 3;
@@ -96,7 +121,9 @@
       return [
         { k:1, url: SB + "/auth/v1/health" },
         { k:2, url: SB + "/functions/v1/verify-access-web" },
-        { k:3, url: location.origin + "/check/" }
+        { k:3, url: location.origin + "/check/" },
+        { k:4, url: "https://biohack-tracker-blond.vercel.app/sb/functions/v1/verify-access-web" },
+        { k:5, url: "https://cdn.irenabio.com/minio/health/live" }
       ];
     }
 
@@ -174,10 +201,57 @@
       return k + ':' + (r.ok ? 'OK' : 'FAIL') + '/' + r.used + '/' + r.times.join(',');
     }
 
+    // Тип сети. Берём ТОЛЬКО сырое navigator.connection.type: это единственное поле,
+    // которое реально различает wifi и мобильный. effectiveType здесь намеренно НЕ
+    // используется - на проводном desktop Chrome он отдаёт "4g", то есть говорит
+    // о скорости, а не о типе сети, и в коде выглядел бы как мобильный интернет там,
+    // где его нет. Значения нет в белом списке (в том числе весь iOS, где этого поля
+    // не существует) - токен не выводим вовсе: отсутствие лучше вранья.
+    // Датчик самопроверяемый: в контролируемом замере с переключением сети wifi-прогон
+    // обязан дать NET:wifi, мобильный - NET:cellular. Не совпало - выкинуть отсюда.
+    var NET_KNOWN = ['wifi', 'cellular', 'ethernet'];
+    function netTag(){
+      var c = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      var t = c && c.type;
+      return (t && NET_KNOWN.indexOf(t) >= 0) ? '  NET:' + t : '';
+    }
+
+    // Тап по блоку кода и так выделяет его целиком, кнопка нужна затем, чтобы длинный
+    // код не пересылали руками по частям и не теряли хвост.
+    function fallbackCopy(node){
+      try {
+        var sel = window.getSelection();
+        var range = document.createRange();
+        range.selectNodeContents(node);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        return document.execCommand('copy');
+      } catch (e) { return false; }
+    }
+
+    function copyCode(){
+      var codeEl = document.getElementById('code');
+      var btn = document.getElementById('copy');
+      function done(ok){
+        btn.textContent = ok ? 'Код скопирован' : 'Выделите код и скопируйте вручную';
+        setTimeout(function(){ btn.textContent = 'Скопировать код'; }, 2500);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(codeEl.textContent).then(
+          function(){ done(true); },
+          function(){ done(fallbackCopy(codeEl)); }
+        );
+      } else {
+        done(fallbackCopy(codeEl));
+      }
+    }
+
     function run(){
       var again = document.getElementById('again');
+      var copy = document.getElementById('copy');
       var codeEl = document.getElementById('code');
       again.disabled = true;
+      copy.disabled = true;
       codeEl.textContent = '…';
       var ts = targets();
       ts.forEach(function(t){ setRunning(t.k, 1); });
@@ -185,12 +259,14 @@
         return runCheck(t).then(function(r){ setDone(t.k, r); return { k:t.k, r:r }; });
       })).then(function(list){
         list.sort(function(a,b){ return a.k - b.k; });
-        codeEl.textContent = list.map(function(x){ return codeFor(x.k, x.r); }).join('  ');
+        codeEl.textContent = list.map(function(x){ return codeFor(x.k, x.r); }).join('  ') + netTag();
         again.disabled = false;
+        copy.disabled = false;
       });
     }
 
     document.getElementById('again').addEventListener('click', run);
+    document.getElementById('copy').addEventListener('click', copyCode);
     run();
   </script>
 </body>
