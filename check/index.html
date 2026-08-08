@@ -93,7 +93,19 @@
         <span class="rleft"><span class="rname">Проверка 9</span><span class="rdet"></span></span>
         <span class="rstat"><span class="icon"></span><span class="dot"></span></span>
       </div>
+      <div class="row" data-k="10">
+        <span class="rleft"><span class="rname">Проверка 10</span><span class="rdet">нажмите кнопку ниже</span></span>
+        <span class="rstat"><span class="icon"></span><span class="dot"></span></span>
+      </div>
+      <div class="row" data-k="11">
+        <span class="rleft"><span class="rname">Проверка 11</span><span class="rdet">нажмите кнопку ниже</span></span>
+        <span class="rstat"><span class="icon"></span><span class="dot"></span></span>
+      </div>
     </div>
+
+    <p class="note">Проверки 10 и 11 запускаются отдельной кнопкой и занимают до 10 секунд.
+      <b>Звука вы не услышите - так и должно быть</b>, проверяется только скорость ответа.</p>
+    <button class="btn ghost" id="sound" type="button" disabled>Проверить звук</button>
 
     <p class="code-label">Когда все проверки завершатся, пришлите этот код:</p>
     <div class="code" id="code">…</div>
@@ -278,12 +290,136 @@
       }
     }
 
+    // ===================== ПРОВЕРКИ 10 и 11: порог сторожа звука =====================
+    // Отдельный прибор от проверок выше. Те меряют достижимость через fetch и 8 секунд.
+    // Эти воспроизводят решение, которое принимает ПЛЕЕР в app.irenabio.com: тем же
+    // элементом <audio> и с ТЕМ ЖЕ порогом 4 секунды.
+    //
+    // Файл запрашивается БЕЗ подписи, поэтому живой хост ответит отказом. Это и нужно:
+    // нас интересует не воспроизведение, а "ответил или молчал". Отказ за 143 мс значит
+    // "хост жив, сторож бы его не тронул"; молчание 4 секунды значит "для приложения
+    // этот источник мёртв". Инверсия намеренная: в плеере error запускает лестницу,
+    // здесь быстрый error - доказательство жизни.
+    //
+    // ПОЧЕМУ ОТДЕЛЬНОЙ КНОПКОЙ, а не вместе со всеми: iOS Safari игнорирует preload и
+    // не начинает грузить медиа без жеста пользователя. Запусти мы это автоматически -
+    // на айфоне ОБА источника показали бы молчание, то есть ложное "всё мертво" на
+    // ровном месте. Жест снимает ограничение. Он же повторяет реальный сценарий: женщина
+    // в приложении тоже сначала нажимает play.
+    //
+    // Последовательно, а не параллельно: два одновременных соединения на мобильном
+    // искажают времена друг друга, а нам нужны цифры, сравнимые с порогом.
+    var AUDIO_WATCHDOG_MS = 4000;   // ТОТ ЖЕ порог, что в плеере. Менять только вместе с ним.
+    function audioTargets(){
+      return [
+        { k:10, url: "https://s3.twcstorage.ru/irenabio-audio/sprints/test/day1.m4a" },
+        { k:11, url: "https://cdn.irenabio.com/audio/sprints/test/day1.m4a" }
+      ];
+    }
+
+    function audioProbe(t){
+      return new Promise(function(resolve){
+        var a = new Audio();
+        a.preload = 'metadata';
+        a.muted = true; a.volume = 0;    // если файл вдруг окажется играбельным - женщина не должна ничего услышать
+        var t0 = performance.now();
+        var settled = false;
+        var timer = setTimeout(function(){ finish(false, 0); }, AUDIO_WATCHDOG_MS);
+        function finish(answered, errCode){
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          try { a.removeAttribute('src'); a.load(); } catch (e) {}
+          resolve({ answered: answered, ms: Math.round(performance.now() - t0), errCode: errCode });
+        }
+        // Любой из этих признаков доказывает, что сервер на той стороне ответил.
+        ['progress','loadedmetadata','canplay','playing'].forEach(function(ev){
+          a.addEventListener(ev, function(){ finish(true, 0); });
+        });
+        a.addEventListener('error', function(){
+          finish(true, (a.error && a.error.code) || 0);
+        });
+        var bust = (t.url.indexOf('?') < 0 ? '?' : '&') + '_=' + Date.now() + '-' + Math.random().toString(36).slice(2);
+        a.src = t.url + bust;
+        // play() глушёного элемента разрешён политиками и заставляет iOS реально начать
+        // загрузку. Отказ здесь не считаем результатом: вердикт дают события выше.
+        var p = a.play();
+        if (p && p.catch) p.catch(function(){});
+      });
+    }
+
+    function setAudioDone(k, r){
+      var row = el(k);
+      row.querySelector('.dot').className = 'dot ' + (r.answered ? 'ok' : 'bad');
+      var ic = row.querySelector('.icon');
+      ic.className = 'icon ' + (r.answered ? 'ok' : 'bad');
+      ic.textContent = r.answered ? '✓' : '✗';
+      row.querySelector('.rdet').textContent = r.answered
+        ? ('ответил за ' + r.ms + ' мс' + (r.errCode ? ' · код ' + r.errCode : ''))
+        : ('молчал ' + Math.round(r.ms / 1000) + ' с - для приложения источник мёртв');
+    }
+
+    // Отдельная форма токена, намеренно НЕ похожая на строки выше: это другой прибор,
+    // и путать их при разборе нельзя. 10:ANS/143 - ответил за 143 мс; 11:SILENT/4001 - молчал.
+    function audioCodeFor(k, r){
+      return k + ':' + (r.answered ? 'ANS' : 'SILENT') + '/' + r.ms;
+    }
+
+    var lastMain = null, lastAudio = null;
+
+    function renderCode(){
+      var codeEl = document.getElementById('code');
+      var parts = [];
+      if (lastMain) parts = parts.concat(lastMain.map(function(x){ return codeFor(x.k, x.r); }));
+      if (lastAudio) parts = parts.concat(lastAudio.map(function(x){ return audioCodeFor(x.k, x.r); }));
+      codeEl.textContent = parts.length ? (parts.join('  ') + netTag()) : '…';
+    }
+
+    function runSound(){
+      var btn = document.getElementById('sound');
+      btn.disabled = true;
+      var ts = audioTargets();
+      ts.forEach(function(t){
+        var row = el(t.k);
+        row.querySelector('.dot').className = 'dot run';
+        row.querySelector('.icon').textContent = '';
+        row.querySelector('.rdet').textContent = 'идёт проверка...';
+      });
+      var out = [];
+      function step(i){
+        if (i >= ts.length) {
+          lastAudio = out;
+          renderCode();
+          btn.disabled = false;
+          btn.textContent = 'Проверить звук ещё раз';
+          return;
+        }
+        return audioProbe(ts[i]).then(function(r){
+          setAudioDone(ts[i].k, r);
+          out.push({ k: ts[i].k, r: r });
+          return step(i + 1);
+        });
+      }
+      step(0);
+    }
+
     function run(){
       var again = document.getElementById('again');
       var copy = document.getElementById('copy');
       var codeEl = document.getElementById('code');
+      var sound = document.getElementById('sound');
       again.disabled = true;
       copy.disabled = true;
+      sound.disabled = true;
+      // Новый прогон - новые условия сети: старый замер звука к нему уже не относится.
+      lastAudio = null;
+      [10, 11].forEach(function(k){
+        var row = el(k);
+        row.querySelector('.dot').className = 'dot';
+        row.querySelector('.icon').textContent = '';
+        row.querySelector('.icon').className = 'icon';
+        row.querySelector('.rdet').textContent = 'нажмите кнопку ниже';
+      });
       codeEl.textContent = '…';
       var ts = targets();
       ts.forEach(function(t){ setRunning(t.k, 1); });
@@ -291,14 +427,17 @@
         return runCheck(t).then(function(r){ setDone(t.k, r); return { k:t.k, r:r }; });
       })).then(function(list){
         list.sort(function(a,b){ return a.k - b.k; });
-        codeEl.textContent = list.map(function(x){ return codeFor(x.k, x.r); }).join('  ') + netTag();
+        lastMain = list;
+        renderCode();
         again.disabled = false;
         copy.disabled = false;
+        sound.disabled = false;
       });
     }
 
     document.getElementById('again').addEventListener('click', run);
     document.getElementById('copy').addEventListener('click', copyCode);
+    document.getElementById('sound').addEventListener('click', runSound);
     run();
   </script>
 </body>
