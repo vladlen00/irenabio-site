@@ -142,3 +142,11 @@ a:hover { text-decoration: underline; }
   .author-card { flex-direction: row; align-items: flex-start; padding: 28px 30px; }
   .author-photo { width: 220px; height: 280px; }
 }
+
+/* СНЯТО С ПРОДАЖИ 31.08.2026 (тарифы 6m и 12m), до живого теста.
+   Первая строка обязательна: .plan{display:flex} перебивает браузерное правило для
+   атрибута hidden, и без неё скрытые карточки остались бы видимыми.
+   Вторая строка держит вид: пока виден один тариф, сетка из трёх колонок оставляла бы
+   его узкой карточкой у левого края. Обе строки убрать вместе с возвратом тарифов. */
+[hidden] { display: none !important; }
+.plans:has(.plan[hidden]) { grid-template-columns: minmax(0, 340px); justify-content: center; }
