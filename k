@@ -1,1 +1,0 @@
-ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOxLTk8fKf9prQoiYQt5zRe8lDfu6eTZc9QN9Dnf5zEN vladlen-pc-minio-2026-10-21
