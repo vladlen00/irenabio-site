@@ -141,11 +141,18 @@ p{margin:0;text-wrap:pretty}
 .pz__note{margin-top:20px;font-size:13px;color:var(--on-dark-3)}
 
 /* REVIEWS */
-.reviews{margin-top:24px;display:grid;gap:12px}
-.review{margin:0;padding:22px;border-radius:20px;background:var(--card);border:1px solid rgba(34,25,32,.08);display:flex;flex-direction:column}
-.review__mark{font-family:var(--serif);font-size:44px;line-height:.6;height:22px;color:var(--accent)}
-.review blockquote{margin:8px 0 0;font-family:var(--serif);font-size:19px;line-height:1.42}
-.review figcaption{margin-top:auto;padding-top:12px;font-size:13px;color:var(--muted-2)}
+.rev-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px}
+.rev-nav{display:none;gap:8px;flex:0 0 auto}
+.rev-btn{width:48px;height:48px;border-radius:999px;border:1px solid rgba(34,25,32,.14);background:var(--card);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .18s ease,background-color .18s ease,opacity .18s ease}
+.rev-btn:hover{background:var(--ink);color:var(--bg)}
+.rev-btn:active{transform:scale(.94)}
+.rev-btn[disabled]{opacity:.35;pointer-events:none}
+.shots{margin-top:24px;display:flex;align-items:flex-start;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:4px max(24px,calc((100% - 1072px) / 2)) 12px;scroll-padding-inline:max(24px,calc((100% - 1072px) / 2));overscroll-behavior-x:contain}
+.shots::-webkit-scrollbar{display:none}
+.shots:focus-visible{outline-offset:-2px}
+.shot{flex:0 0 min(80vw,300px);margin:0;scroll-snap-align:start}
+.shot__tag{margin-bottom:8px;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2)}
+.shot img{display:block;width:100%;height:auto;border-radius:18px;background:#17212B;box-shadow:0 1px 2px rgba(34,25,32,.06),0 10px 28px rgba(34,25,32,.10)}
 
 /* PRICE */
 .price__quote{font-family:var(--serif);font-style:italic;font-size:26px;line-height:1.28}
@@ -210,7 +217,9 @@ p{margin:0;text-wrap:pretty}
   .tools{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:48px}
   .tool:nth-last-child(2){border-bottom:1px solid var(--line)}
   .pz .h2{font-size:40px}
-  .reviews{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .rev-nav{display:flex}
+  .shots{gap:16px}
+  .shot{flex-basis:300px}
   .price__grid{display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:72px;align-items:center}
   .price .h2{font-size:40px}
   .card{margin-top:0}
@@ -363,15 +372,26 @@ if (window.YM_COUNTER) {
 </section>
 
 <section class="section" aria-labelledby="rev-h">
-<div class="wrap">
+<div class="wrap rev-head">
+<div>
 <div class="kicker">Отзывы</div>
 <h2 class="h2" id="rev-h">Что меняется у участниц</h2>
-<div class="reviews">
-<figure class="review"><div class="review__mark" aria-hidden="true">“</div><blockquote>Не тянущиеся джинсы стали свободнее, а тянущийся рабочий купальник стал гармошкой.</blockquote><figcaption>Участница программы</figcaption></figure>
-<figure class="review"><div class="review__mark" aria-hidden="true">“</div><blockquote>Я ложусь и просыпаюсь в одно и то же время, у меня наконец появился режим. И это не на силе воли, как я пыталась раньше. А с удовольствием и естественно.</blockquote><figcaption>Участница программы</figcaption></figure>
-<figure class="review"><div class="review__mark" aria-hidden="true">“</div><blockquote>Последние два дня я просыпаюсь в 7 утра сама, без будильника! Раньше в 11 еле вытаскивала себя из кровати.</blockquote><figcaption>Участница программы</figcaption></figure>
+<p class="lead">Скриншоты из нашего чата отзывов. Текст без правок, фамилии скрыли.</p>
 </div>
-<p class="note" style="margin-top:16px">Настоящие слова участниц, публикуем без имён.</p>
+<div class="rev-nav" aria-hidden="true">
+<button type="button" class="rev-btn" data-dir="-1" tabindex="-1" aria-label="Назад"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>
+<button type="button" class="rev-btn" data-dir="1" tabindex="-1" aria-label="Дальше"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button>
+</div>
+</div>
+<div class="shots" id="shots" role="region" aria-label="Отзывы участниц, листаются вбок" tabindex="0">
+<figure class="shot"><figcaption class="shot__tag">Тело</figcaption><img src="assets/img/otzyv-63.webp" width="720" height="641" alt="Отзыв участницы: За 2 недели живот стал заметно меньше" loading="lazy" decoding="async"></figure>
+<figure class="shot"><figcaption class="shot__tag">Медитации</figcaption><img src="assets/img/otzyv-70.webp" width="720" height="610" alt="Отзыв участницы: Засыпает под медитации, дети просят детские" loading="lazy" decoding="async"></figure>
+<figure class="shot"><figcaption class="shot__tag">Отношения</figcaption><img src="assets/img/otzyv-69.webp" width="720" height="528" alt="Отзыв участницы: Курс «Игра в долгую»: практичные советы для долгих отношений" loading="lazy" decoding="async"></figure>
+<figure class="shot"><figcaption class="shot__tag">ИИ-подружка</figcaption><img src="assets/img/otzyv-52.webp" width="720" height="776" alt="Отзыв участницы: Подружка разобрала омегу по составам и брендам" loading="lazy" decoding="async"></figure>
+<figure class="shot"><figcaption class="shot__tag">Тело</figcaption><img src="assets/img/otzyv-45.webp" width="720" height="682" alt="Отзыв участницы: В 42 года впервые полюбила приседания" loading="lazy" decoding="async"></figure>
+<figure class="shot"><figcaption class="shot__tag">Сон</figcaption><img src="assets/img/otzyv-23.webp" width="720" height="640" alt="Отзыв участницы: Сон крепче, встаёт в 6-7 утра без разбитости" loading="lazy" decoding="async"></figure>
+<figure class="shot"><figcaption class="shot__tag">Тренировки</figcaption><img src="assets/img/otzyv-36.webp" width="720" height="234" alt="Отзыв участницы: Впервые прочувствовала ягодицы в мостике" loading="lazy" decoding="async"></figure>
+<figure class="shot"><figcaption class="shot__tag">Сон</figcaption><img src="assets/img/otzyv-64.webp" width="720" height="433" alt="Отзыв участницы: С медитацией засыпает за пару минут" loading="lazy" decoding="async"></figure>
 </div>
 </section>
 
@@ -443,6 +463,12 @@ if (window.YM_COUNTER) {
 (function(){
   var COUNTER = window.YM_COUNTER || 0; /* номер счётчика задаётся в <head>, window.YM_COUNTER */
   function goal(name){ try{ if(COUNTER && window.ym){ ym(COUNTER,'reachGoal',name); } }catch(e){} }
+
+  /* Карусель отзывов-скриншотов */
+  (function(){var s=document.getElementById('shots');if(!s)return;var b=document.querySelectorAll('.rev-btn');var seen=false;
+function upd(){var m=s.scrollWidth-s.clientWidth-4;b[0].disabled=s.scrollLeft<4;b[1].disabled=s.scrollLeft>m;}
+b.forEach(function(x){x.addEventListener('click',function(){var c=s.querySelector('.shot');var step=c?c.getBoundingClientRect().width+16:300;s.scrollBy({left:step*Number(x.getAttribute('data-dir')),behavior:'smooth'});});});
+s.addEventListener('scroll',function(){upd();if(!seen&&s.scrollLeft>40){seen=true;goal('reviews_swipe');}},{passive:true});upd();})();
 
   var params = new URLSearchParams(location.search);
   var pass = {};
