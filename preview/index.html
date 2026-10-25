@@ -69,7 +69,7 @@ p{margin:0;text-wrap:pretty}
 .hero__photo{position:relative;height:420px;background:#E6DBD2;overflow:hidden}
 .hero__photo img{width:100%;height:100%;object-fit:cover;object-position:50% 30%}
 .hero__badge{position:absolute;left:16px;bottom:48px;max-width:calc(100% - 32px);padding:8px 14px;border-radius:16px;background:var(--bg);line-height:1.25}
-.hero__badge b{display:block;font-size:14px}
+.hero__who{font-size:14px}
 .hero__badge span{font-size:12px;color:var(--muted-2)}
 .hero__panel{position:relative;margin-top:-32px;border-radius:28px 28px 0 0;background:var(--bg);padding:26px 0 40px}
 .hero h1{font-size:34px;line-height:1.08}
@@ -97,13 +97,6 @@ p{margin:0;text-wrap:pretty}
 .task svg.chev{flex:0 0 18px;transition:transform .18s ease}
 .task a:hover svg.chev{transform:translateX(3px)}
 
-/* PAIN */
-.pain__p{margin-top:16px;font-size:17px;color:var(--ink-2)}
-.quotes{margin-top:24px;display:flex;flex-direction:column;gap:10px}
-.quote{margin:0;padding:16px 18px;border-radius:18px;background:var(--bg-alt);font-family:var(--serif);font-style:italic;font-size:19px;line-height:1.4}
-.turn{margin-top:28px;font-family:var(--serif);font-size:24px;line-height:1.3}
-.turn em{font-style:italic;color:var(--accent)}
-
 /* IRENA */
 .irena__photo{width:112px;height:112px;border-radius:50%;object-fit:cover}
 .irena__text p{margin-top:16px;font-size:17px;line-height:1.6;color:var(--ink-2)}
@@ -120,27 +113,6 @@ p{margin:0;text-wrap:pretty}
 .step__when{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted-2)}
 .step__what{margin-top:4px}
 .reassure{margin-top:24px;padding:18px 20px;border-radius:18px;background:var(--card);border:1px solid rgba(34,25,32,.10);color:var(--ink-2)}
-
-/* INSIDE */
-.tools{list-style:none;margin:20px 0 0;padding:0;display:grid}
-.tool{display:flex;align-items:center;gap:14px;padding:12px 0;border-top:1px solid var(--line)}
-.tool:last-child{border-bottom:1px solid var(--line)}
-.tool__ic{flex:0 0 40px;height:40px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center}
-.tool b{display:block;font-size:16px}
-.tool span{font-size:14px;color:var(--muted-2)}
-
-/* PODRUZHKA */
-.pz .h2{font-size:30px;line-height:1.15}
-.pz__chips{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px}
-.pz__chip{padding:9px 14px;border-radius:999px;border:1px solid var(--line-dark);font-size:14px;color:#E9DFE3}
-.chat{margin-top:24px;display:flex;flex-direction:column;gap:16px}
-.bubble{padding:14px 16px;font-size:16px;line-height:1.55}
-.bubble--me{align-self:flex-end;max-width:280px;border-radius:20px 20px 6px 20px;background:var(--on-dark);color:var(--ink)}
-.bubble--her{max-width:330px;border-radius:6px 20px 20px 20px;background:var(--dark-2)}
-.who{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.who img{width:32px;height:32px;border-radius:50%}
-.who span{font-size:13px;font-weight:500;color:#CDBFC6}
-.pz__note{margin-top:20px;font-size:13px;color:var(--on-dark-3)}
 
 /* REVIEWS */
 .rev-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px}
@@ -211,14 +183,10 @@ p{margin:0;text-wrap:pretty}
   .hero__hint,.hero__trust{text-align:left}
   .hero__trust{max-width:560px}
   .tasks{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:48px}
-  .two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:72px;align-items:start}
   .irena{display:grid;grid-template-columns:220px minmax(0,1fr);gap:64px;align-items:start}
   .irena__photo{width:220px;height:220px}
   .steps{grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
   .reassure{max-width:640px}
-  .tools{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:48px}
-  .tool:nth-last-child(2){border-bottom:1px solid var(--line)}
-  .pz .h2{font-size:40px}
   .rev-nav{display:flex}
   .shots{gap:16px}
   .shot{flex-basis:300px}
@@ -252,7 +220,7 @@ if (window.YM_COUNTER) {
 <div class="hero__grid">
 <div class="hero__photo">
 <img src="assets/img/irena-hero.webp" width="720" height="900" alt="Ирена Пол" fetchpriority="high">
-<div class="hero__badge"><b>Ирена Пол</b><span>10 000+ учениц · автор 8 программ<br>1 млн+ подписчиков</span></div>
+<div class="hero__badge"><div class="hero__who"><b>Ирена Пол</b> · биохакер, сексолог</div><span>20 000+ учениц · автор 8 программ<br>1 млн+ подписчиков</span></div>
 </div>
 <div class="hero__panel">
 <div class="wrap">
@@ -269,7 +237,7 @@ if (window.YM_COUNTER) {
 </div>
 <a class="btn" id="cta-main" data-app data-goal-link data-ym="cta_free" href="https://app.irenabio.com/?src=landing&amp;goal=sleep">Начать бесплатно<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></a>
 <p class="note hero__hint" id="cta-hint" aria-live="polite">Первые два дня «Архитектуры сна» бесплатно</p>
-<p class="hero__trust">700+ женщин уже внутри · 11 € в месяц, всё включено</p>
+<p class="hero__trust">11 € в месяц, всё включено</p>
 </div>
 </div>
 </div>
@@ -284,92 +252,13 @@ if (window.YM_COUNTER) {
 <li class="task"><a data-app data-ym="task_sleep" href="https://app.irenabio.com/?src=landing&amp;goal=sleep"><img src="assets/img/thumb-sleep.webp" width="56" height="56" alt="" loading="lazy"><span class="task__text"><span class="task__title">Наладить сон и просыпаться бодрой</span><span class="task__how">«Архитектура сна»</span></span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a></li>
 <li class="task"><a data-app data-ym="task_weight" href="https://app.irenabio.com/?src=landing&amp;goal=weight"><img src="assets/img/thumb-nutrition.webp" width="56" height="56" alt="" loading="lazy"><span class="task__text"><span class="task__title">Сбросить лишнее без голодовок</span><span class="task__how">«Основы питания»</span></span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a></li>
 <li class="task"><a data-app data-ym="task_deficits" href="https://app.irenabio.com/?src=landing&amp;goal=deficits"><span class="task__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F5EFE9" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3"/><path d="M7.5 15h9"/></svg></span><span class="task__text"><span class="task__title">Понять, каких витаминов не хватает</span><span class="task__how">Справочник анализов и добавок, ИИ-подружка</span></span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a></li>
-<li class="task"><a data-app data-ym="task_body" href="https://app.irenabio.com/?src=landing&amp;goal=body"><img src="assets/img/thumb-glutes.webp" width="56" height="56" alt="" loading="lazy"><span class="task__text"><span class="task__title">Подтянуть тело дома</span><span class="task__how">Тренировки «Женское тело» и «Биохакинг ягодиц»</span></span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a></li>
+<li class="task"><a data-app data-ym="task_body" href="https://app.irenabio.com/?src=landing&amp;goal=body"><img src="assets/img/thumb-woman-body.webp" width="56" height="56" alt="" loading="lazy"><span class="task__text"><span class="task__title">Подтянуть тело дома</span><span class="task__how">«Женское тело»</span></span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a></li>
+<li class="task"><a data-app data-ym="task_glutes" href="https://app.irenabio.com/?src=landing&amp;goal=glutes"><img src="assets/img/thumb-glutes.webp" width="56" height="56" alt="" loading="lazy"><span class="task__text"><span class="task__title">Подтянуть ягодицы</span><span class="task__how">«Биохакинг ягодиц»</span></span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a></li>
 <li class="task"><a data-app data-ym="task_love" href="https://app.irenabio.com/?src=landing&amp;goal=love"><img src="assets/img/thumb-relationships.webp" width="56" height="56" alt="" loading="lazy"><span class="task__text"><span class="task__title">Вернуть тепло в отношения с мужем</span><span class="task__how">«Биохакинг отношений» и курс «Игра в долгую»</span></span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a></li>
 <li class="task"><a data-app data-ym="task_calm" href="https://app.irenabio.com/?src=landing&amp;goal=calm"><img src="assets/img/thumb-antichaos.webp" width="56" height="56" alt="" loading="lazy"><span class="task__text"><span class="task__title">Меньше тревоги, больше спокойствия</span><span class="task__how">«Анти-хаос», медитации и дыхание</span></span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a></li>
 <li class="task"><a data-app data-ym="task_hormones" href="https://app.irenabio.com/?src=landing&amp;goal=hormones"><img src="assets/img/thumb-perimenopause.webp" width="56" height="56" alt="" loading="lazy"><span class="task__text"><span class="task__title">Спокойно пройти гормональные перемены после 35</span><span class="task__how">«Перименопауза»</span></span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a></li>
 <li class="task"><a data-app data-ym="task_gut" href="https://app.irenabio.com/?src=landing&amp;goal=gut"><img src="assets/img/thumb-gut-body.webp" width="56" height="56" alt="" loading="lazy"><span class="task__text"><span class="task__title">Убрать вздутие и тяжесть после еды</span><span class="task__how">«ЖКТ и тело»</span></span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a></li>
 </ul>
-</div>
-</section>
-
-<section class="section" aria-labelledby="pain-h">
-<div class="wrap two">
-<div>
-<div class="kicker">Знакомо?</div>
-<h2 class="h2" id="pain-h">Здоровье превратилось во вторую работу</h2>
-<p class="pain__p">Приложение для цикла, трекер воды, платные медитации, чат с тренером, папка с анализами. И ни одно не знает о другом.</p>
-</div>
-<div>
-<div class="quotes">
-<blockquote class="quote">«Умом знаю, что делать, а дисциплины и веры в результат не хватает»</blockquote>
-<blockquote class="quote">«Думала, потребуют невыполнимого: ложитесь в 10, на ночь не есть»</blockquote>
-</div>
-<p class="note" style="margin-top:8px">Так говорили наши участницы</p>
-<p class="turn">Дело не в лени. Знаний много, а системы нет. Поэтому я сделала <em>систему</em>: один понятный шаг в день.</p>
-</div>
-</div>
-</section>
-
-<section class="section alt" aria-labelledby="irena-h">
-<div class="wrap irena">
-<img class="irena__photo" src="assets/img/irena-avatar.webp" width="480" height="480" alt="Ирена Пол" loading="lazy">
-<div class="irena__text">
-<div class="kicker" style="margin-top:24px">Почему я это сделала</div>
-<h2 class="h2" id="irena-h" style="font-size:34px">Привет, я Ирена</h2>
-<p>Я сама через это проходила: куча приложений, папка анализов и новая жизнь с каждого понедельника. В какой-то момент я решила закрыть этот вопрос раз и навсегда и собрала всё, что знаю о женском теле, в одну систему. Делала для себя, а получилось так хорошо, что теперь по ней занимаются сотни женщин.</p>
-<p>Я дипломированный сексолог, но не врач: ничего не лечу и не ставлю диагнозов. Я беру то, что подтверждают исследования, и перевожу на язык обычного дня.</p>
-<div class="stats">
-<div class="stat"><b>10&nbsp;000+</b><span>учениц за все годы</span></div>
-<div class="stat"><b>8</b><span>программ внутри</span></div>
-<div class="stat"><b>700+</b><span>занимаются сейчас</span></div>
-</div>
-</div>
-</div>
-</section>
-
-<section class="section" aria-labelledby="how-h">
-<div class="wrap">
-<div class="kicker">Как это устроено</div>
-<h2 class="h2" id="how-h">Один подкаст и один шаг в день. Ничего не надо запоминать.</h2>
-<ol class="steps">
-<li class="step"><span class="step__n">01</span><div><div class="step__when">Утром</div><p class="step__what">Открываешь приложение: шаг дня уже ждёт тебя.</p></div></li>
-<li class="step"><span class="step__n">02</span><div><div class="step__when">В дороге или за готовкой</div><p class="step__what">Слушаешь подкаст. Я объясняю, что происходит в теле и почему.</p></div></li>
-<li class="step"><span class="step__n">03</span><div><div class="step__when">Вечером</div><p class="step__what">Делаешь одно небольшое действие и отмечаешь день.</p></div></li>
-</ol>
-<p class="reassure">Пропустила день? Ничего страшного. Программы не связаны между собой, догонять некого.</p>
-</div>
-</section>
-
-<section class="section alt" aria-labelledby="inside-h">
-<div class="wrap">
-<div class="kicker">Что внутри</div>
-<h2 class="h2" id="inside-h">Всё в одном месте, в твоём телефоне</h2>
-<ul class="tools">
-<li class="tool"><span class="tool__ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#221920" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1v-6h1a2 2 0 0 1 2 2z"/><path d="M3 15a2 2 0 0 0 2 2h1v-6H5a2 2 0 0 0-2 2z"/></svg></span><div><b>Подкасты и медитации голосом Ирены</b><span>Слушать в дороге, на прогулке, перед сном</span></div></li>
-<li class="tool"><span class="tool__ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#221920" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 6.5v11"/><path d="M17.5 6.5v11"/><path d="M3 9.5v5"/><path d="M21 9.5v5"/><path d="M6.5 12h11"/></svg></span><div><b>Тренировки дома</b><span>Видео с техникой каждого упражнения</span></div></li>
-<li class="tool"><span class="tool__ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#221920" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"/></svg></span><div><b>Справочники</b><span>Анализы, добавки, рецепты</span></div></li>
-<li class="tool"><span class="tool__ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#221920" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z"/></svg></span><div><b>Трекер цикла</b><span>Видишь свою фазу и понимаешь, что с тобой</span></div></li>
-<li class="tool"><span class="tool__ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#221920" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></span><div><b>ИИ-подружка</b><span>Обучена на материалах Ирены</span></div></li>
-</ul>
-</div>
-</section>
-
-<section class="section dark pz" aria-labelledby="pz-h">
-<div class="wrap two">
-<div>
-<div class="kicker">ИИ-подружка</div>
-<h2 class="h2" id="pz-h">Не спится в два часа ночи? Спроси Подружку.</h2>
-<div class="pz__chips"><span class="pz__chip">Почему я просыпаюсь в 4 утра?</span><span class="pz__chip">Можно магний вместе с железом?</span></div>
-<p class="pz__note">Подружка опирается на материалы Ирены. Она не ставит диагнозы и не заменяет врача.</p>
-</div>
-<div class="chat" aria-label="Пример переписки с Подружкой">
-<div class="bubble bubble--me">Сдала анализы, всё в норме, а сил нет. С чего начать?</div>
-<div>
-<div class="who"><img src="assets/img/podruzhka.webp" width="32" height="32" alt="" loading="lazy"><span>Подружка</span></div>
-<div class="bubble bubble--her">Давай проверим базу. В справочнике «Анализы на дефициты» есть минимум, который стоит сдать всем, независимо от возраста и самочувствия. Напиши, какие из них у тебя уже есть, и посмотрим вместе.</div>
-</div>
-</div>
 </div>
 </section>
 
@@ -394,6 +283,36 @@ if (window.YM_COUNTER) {
 <figure class="shot"><figcaption class="shot__tag">Сон</figcaption><img src="assets/img/otzyv-23.webp" width="720" height="640" alt="Отзыв участницы: Сон крепче, встаёт в 6-7 утра без разбитости" loading="lazy" decoding="async"></figure>
 <figure class="shot"><figcaption class="shot__tag">Тренировки</figcaption><img src="assets/img/otzyv-36.webp" width="720" height="234" alt="Отзыв участницы: Впервые прочувствовала ягодицы в мостике" loading="lazy" decoding="async"></figure>
 <figure class="shot"><figcaption class="shot__tag">Сон</figcaption><img src="assets/img/otzyv-64.webp" width="720" height="433" alt="Отзыв участницы: С медитацией засыпает за пару минут" loading="lazy" decoding="async"></figure>
+</div>
+</section>
+
+<section class="section alt" aria-labelledby="irena-h">
+<div class="wrap irena">
+<img class="irena__photo" src="assets/img/irena-avatar.webp" width="480" height="480" alt="Ирена Пол" loading="lazy">
+<div class="irena__text">
+<div class="kicker" style="margin-top:24px">Почему я это сделала</div>
+<h2 class="h2" id="irena-h" style="font-size:34px">Привет, я Ирена</h2>
+<p>Я сама через это проходила: куча приложений, папка анализов и новая жизнь с каждого понедельника. В какой-то момент я решила закрыть этот вопрос раз и навсегда и собрала всё, что знаю о женском теле, в одну систему. Делала для себя, а получилось так хорошо, что теперь по ней занимаются сотни женщин.</p>
+<p>Я дипломированный сексолог, но не врач: ничего не лечу и не ставлю диагнозов. Я беру то, что подтверждают исследования, и перевожу на язык обычного дня.</p>
+<div class="stats">
+<div class="stat"><b>20&nbsp;000+</b><span>учениц за все годы</span></div>
+<div class="stat"><b>8</b><span>программ внутри</span></div>
+<div class="stat"><b>700+</b><span>занимаются в этом месяце</span></div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section" aria-labelledby="how-h">
+<div class="wrap">
+<div class="kicker">Как это устроено</div>
+<h2 class="h2" id="how-h">Один подкаст и один шаг в день. Ничего не надо запоминать.</h2>
+<ol class="steps">
+<li class="step"><span class="step__n">01</span><div><div class="step__when">Утром</div><p class="step__what">Открываешь приложение: шаг дня уже ждёт тебя.</p></div></li>
+<li class="step"><span class="step__n">02</span><div><div class="step__when">В дороге или за готовкой</div><p class="step__what">Слушаешь подкаст. Я объясняю, что происходит в теле и почему.</p></div></li>
+<li class="step"><span class="step__n">03</span><div><div class="step__when">Вечером</div><p class="step__what">Делаешь одно небольшое действие и отмечаешь день.</p></div></li>
+</ol>
+<p class="reassure">Пропустила день? Ничего страшного. Программы не связаны между собой, догонять некого.</p>
 </div>
 </section>
 
