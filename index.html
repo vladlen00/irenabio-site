@@ -147,8 +147,7 @@ p{margin:0;text-wrap:pretty}
 .rev-note{margin-top:4px;font-size:13px;color:var(--muted-2)}
 
 /* PRICE */
-.price .h2{margin-top:0}
-.card{margin-top:24px;padding:28px 24px;border-radius:24px;background:var(--card);border:1px solid rgba(34,25,32,.10)}
+.card{padding:28px 24px;border-radius:24px;background:var(--card);border:1px solid rgba(34,25,32,.10)}
 .card__price{display:flex;align-items:baseline;gap:10px}
 .card__price b{font-family:var(--serif);font-weight:500;font-size:64px;line-height:1}
 .card__price span{color:var(--muted-2)}
@@ -215,7 +214,6 @@ body.show-sticky .sticky{transform:none;visibility:visible;transition:transform 
   .shots{gap:16px}
   .shot{flex-basis:300px}
   .price__grid{max-width:568px}
-  .price .h2{font-size:40px;text-align:center}
   .faq-wrap{max-width:760px}
   .final{padding:96px 0;text-align:center}
   .final p{max-width:560px;margin-inline:auto}
@@ -376,9 +374,10 @@ if (window.YM_COUNTER) {
 <div class="irena__text">
 <div class="kicker" style="margin-top:24px">Почему я это сделала</div>
 <h2 class="h2" id="irena-h" style="font-size:34px">Привет, я Ирена</h2>
-<p>Я сама через это проходила: куча приложений, папка анализов и новая жизнь с каждого понедельника. В какой-то момент я решила закрыть этот вопрос раз и навсегда и собрала всё, что знаю о женском теле, в одну систему. Делала для себя, а получилось так хорошо, что я открыла её для всех.</p>
-<p>Я больше 12 лет замужем, у нас растёт сын. Поэтому знаю, как это, когда на себя почти не остаётся времени.</p>
-<p>Я дипломированный сексолог, но не врач: ничего не лечу и не ставлю диагнозов. Я беру то, что подтверждают исследования, и перевожу на язык обычного дня.</p>
+<p>Мне 39 лет, я дипломированный сексолог и биохакер. Замужем 15 лет, у меня сын, работа и большое сообщество, которому я каждый день отвечаю лично. Я точно знаю, как мало остаётся времени на себя.</p>
+<p>Поэтому все мои программы можно слушать в дороге или за готовкой. Подкаст, одно небольшое действие вечером, и ты движешься вперёд даже в самую загруженную неделю.</p>
+<p>Моя суперсила: объяснять сложные вещи простым языком. Так, чтобы каждая женщина понимала, что и как ей сделать сегодня, чтобы получить результат завтра.</p>
+<p>Я разбираю мифы и противоречивую информацию. Если ты устала от советов, которые спорят друг с другом, и от «новой жизни с&nbsp;понедельника», нам точно по пути 🫶 Буду рада видеть тебя и поделиться тем, что, я убеждена, нужно каждой женщине.</p>
 <div class="stats">
 <div class="stat"><b>20&nbsp;000+</b><span>учениц за все годы</span></div>
 <div class="stat"><b>8</b><span>программ внутри</span></div>
@@ -388,11 +387,8 @@ if (window.YM_COUNTER) {
 </div>
 </section>
 
-<section class="section alt price" aria-labelledby="price-h">
+<section class="section alt price" aria-label="Стоимость">
 <div class="wrap price__grid">
-<div>
-<h2 class="h2" id="price-h">Сначала попробуй бесплатно</h2>
-</div>
 <div class="card">
 <div class="card__price"><b>11 €</b><span>в месяц</span></div>
 <ul class="checks">
