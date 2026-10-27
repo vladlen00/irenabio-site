@@ -532,7 +532,10 @@ s.addEventListener('scroll',function(){upd();if(!seen&&s.scrollLeft>40){seen=tru
     a.addEventListener('click', function(){ goal(a.getAttribute('data-ym')); });
   });
   document.querySelectorAll('.faq details').forEach(function(d, i){
-    d.addEventListener('toggle', function(){ if(d.open) goal('faq_' + (i + 1)); });
+    /* faq_N только при раскрытии посетительницей: первый вопрос открыт в разметке, его toggle при загрузке не считаем */
+    var byUser = false;
+    d.querySelector('summary').addEventListener('click', function(){ byUser = true; });
+    d.addEventListener('toggle', function(){ if(d.open && byUser) goal('faq_' + (i + 1)); byUser = false; });
   });
 })();
 </script>
