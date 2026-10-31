@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  <!-- Служебный адрес для сторис и шапки профиля: сразу переводит в бот клуба.
+       Ссылок на эту страницу с сайта нет и быть не должно, в sitemap её нет.
+       Запасной переход без JS через 1 с. С JS уходим раньше: как только ушёл
+       пиксель Метрики, или через 0,5 с, что наступит первым. -->
+  <meta http-equiv="refresh" content="1;url=https://t.me/Biochakirena_bot?start=qCfXL3Yeoe0rDMk3">
+  <title>Клуб в Telegram</title>
+  <style>
+    body{ margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+          background:#fcf8f5; color:#3d3333; text-align:center;
+          font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+    .wrap{ padding:32px 20px; max-width:420px; }
+    p{ color:#8a7d7d; font-size:15px; margin:0 0 20px; }
+    a{ display:inline-block; padding:14px 24px; border-radius:14px; font-size:16px; font-weight:700;
+       color:#fff; text-decoration:none; background:#c98a8a;
+       background:linear-gradient(90deg,#d9a7a0,#c98a8a); }
+  </style>
+  <script>
+  (function(){
+    var TARGET = 'https://t.me/Biochakirena_bot?start=qCfXL3Yeoe0rDMk3';
+    var YM_COUNTER = 113821443;
+    var gone = false;
+    function go(){ if (gone) return; gone = true; location.replace(TARGET); }
+    // Переход не ждёт Метрику дольше полсекунды.
+    setTimeout(go, 500);
+    // Визит засчитываем пикселем Метрики (тот же адрес, что в <noscript> её стандартного кода):
+    // один запрос вместо tag.js, который у новой посетительницы шлёт просмотр только
+    // через ~0,7-1,1 с из-за синхронизации кук. Адрес страницы Метрика берёт из Referer,
+    // поэтому выше meta referrer отдаёт полный адрес, вместе с utm-метками.
+    try {
+      var img = new Image();
+      img.onload = img.onerror = go;
+      img.src = 'https://mc.yandex.ru/watch/' + YM_COUNTER;
+    } catch (e) { go(); }
+  })();
+  </script>
+</head>
+<body>
+  <main class="wrap">
+    <p>Открываем клуб в Telegram...</p>
+    <a href="https://t.me/Biochakirena_bot?start=qCfXL3Yeoe0rDMk3" rel="nofollow noopener">Открыть клуб в Telegram</a>
+  </main>
+</body>
+</html>
