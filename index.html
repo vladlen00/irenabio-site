@@ -84,7 +84,7 @@ p{margin:0;text-wrap:pretty}
 .chip svg{display:none}
 .chip[aria-pressed="true"] svg{display:block}
 .hero__hint{margin-top:8px;min-height:20px;font-size:14px;line-height:20px;color:var(--muted);white-space:nowrap}
-@media (max-width:340px){.hero__hint{font-size:13px}}
+@media (max-width:340px){.hero__hint{font-size:13px}.btn{padding:0 20px;gap:8px;font-size:15px}.btn__t{white-space:nowrap}}
 .hero .btn{margin-top:18px}
 .hero .hero__hint + .btn{margin-top:14px}
 .hero__trust{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);text-align:center;font-size:13px;color:var(--ink-2)}
@@ -145,7 +145,7 @@ p{margin:0;text-wrap:pretty}
 .shots::-webkit-scrollbar{display:none}
 .shots:focus-visible{outline-offset:-2px}
 .shot{flex:0 0 min(80vw,300px);margin:0;scroll-snap-align:start;display:flex;flex-direction:column;background:var(--card);border:1px solid rgba(34,25,32,.08);border-radius:22px;padding:16px 14px 14px}
-.shot__q{font-family:var(--serif);font-style:italic;font-size:19px;line-height:1.3;margin:0 0 14px;color:var(--ink)}
+.shot__q{font-family:var(--serif);font-style:italic;font-size:19px;line-height:1.3;margin:0 0 14px;color:var(--ink);font-variant-numeric:lining-nums}
 .shot__tag{margin-bottom:8px;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2)}
 .shot img{display:block;width:100%;height:auto;border-radius:14px}
 .rev-note{margin-top:4px;font-size:13px;color:var(--muted-2)}
@@ -276,8 +276,8 @@ if (window.YM_COUNTER) {
 </div>
 <p class="hero__hint" id="hero-hint" aria-live="polite"></p>
 <a class="btn" id="cta-main" data-app data-goal-link data-ym="cta_free" href="https://app.irenabio.com/?src=landing&amp;goal=sleep"><span class="btn__t">Попробовать бесплатно</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></a>
-<a class="link" data-app data-ym="cta_buy_hero" href="https://app.irenabio.com/?buy=1">или сразу оформить подписку за 11 €</a>
-<p class="hero__trust"><b>Без регистрации и без карты</b> · потом 11 € в месяц</p>
+<a class="link" data-app data-ym="cta_buy_hero" href="https://app.irenabio.com/?buy=1">или сразу оформить подписку за 11&nbsp;€</a>
+<p class="hero__trust"><b>Без регистрации и без карты</b> · потом 11&nbsp;€ в месяц</p>
 </div>
 </div>
 </div>
@@ -433,7 +433,7 @@ if (window.YM_COUNTER) {
 <section class="section alt price" aria-label="Стоимость">
 <div class="wrap price__grid">
 <div class="card">
-<div class="card__price"><b>11 €</b><span>в месяц</span></div>
+<div class="card__price"><b>11&nbsp;€</b><span>в месяц</span></div>
 <ul class="checks">
 <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A3B58" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4.5 4.5L19 7"/></svg>8 программ и больше 190 дней занятий, всё открыто сразу</li>
 <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A3B58" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4.5 4.5L19 7"/></svg>Подкасты и медитации голосом Ирены</li>
