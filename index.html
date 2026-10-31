@@ -84,6 +84,7 @@ p{margin:0;text-wrap:pretty}
 .chip svg{display:none}
 .chip[aria-pressed="true"] svg{display:block}
 .hero__hint{margin-top:8px;min-height:20px;font-size:14px;line-height:20px;color:var(--muted);white-space:nowrap}
+@media (max-width:340px){.hero__hint{font-size:13px}}
 .hero .btn{margin-top:18px}
 .hero .hero__hint + .btn{margin-top:14px}
 .hero__trust{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);text-align:center;font-size:13px;color:var(--ink-2)}
@@ -148,6 +149,18 @@ p{margin:0;text-wrap:pretty}
 .shot__tag{margin-bottom:8px;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2)}
 .shot img{display:block;width:100%;height:auto;border-radius:14px}
 .rev-note{margin-top:4px;font-size:13px;color:var(--muted-2)}
+/* Ещё три отзыва-скриншота под блоком до/после (31.10.2026): сон и отношения */
+.rev-sub{margin:40px 0 0;font-family:var(--serif);font-weight:500;font-size:24px;line-height:1.2;color:var(--ink)}
+.shots--more{margin-top:16px}
+/* До/после (31.10.2026): два фото 3:4 рядом, метки, плашка срока, цитата */
+.shot.dp{flex-basis:min(84vw,320px);padding:12px 12px 16px}
+.dp__pair{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.dp__ph{position:relative;aspect-ratio:3/4;border-radius:14px;overflow:hidden;background:var(--bg-alt)}
+.shot .dp__ph img{width:100%;height:100%;object-fit:cover;border-radius:0}
+.dp__lb{position:absolute;top:8px;left:8px;padding:3px 9px;border-radius:999px;background:rgba(34,25,32,.72);color:var(--on-dark);font-size:12px;font-weight:600;line-height:1.3}
+.dp__term{align-self:flex-start;margin-top:12px;padding:4px 12px;border-radius:999px;background:var(--accent);color:#fff;font-size:13px;font-weight:600;white-space:nowrap}
+.dp__term+.dp__q{margin-top:10px}
+.dp__q{margin-top:14px;font-family:var(--serif);font-style:italic;font-size:18px;line-height:1.3;color:var(--ink);font-variant-numeric:lining-nums}
 
 /* PRICE */
 .card{padding:28px 24px;border-radius:24px;background:var(--card);border:1px solid rgba(34,25,32,.10)}
@@ -216,6 +229,7 @@ body.show-sticky .sticky{transform:none;visibility:visible;transition:transform 
   .rev-nav{display:flex}
   .shots{gap:16px}
   .shot{flex-basis:300px}
+  .shot.dp{flex-basis:320px}
   .price__grid{max-width:568px}
   .faq-wrap{max-width:760px}
   .final{padding:96px 0;text-align:center}
@@ -371,24 +385,30 @@ if (window.YM_COUNTER) {
 <div class="wrap rev-head">
 <div>
 <div class="kicker">Отзывы</div>
-<h2 class="h2" id="rev-h">Что меняется у участниц</h2>
+<h2 class="h2" id="rev-h">Результаты учениц Ирены</h2>
 </div>
 <div class="rev-nav" aria-hidden="true">
 <button type="button" class="rev-btn" data-dir="-1" tabindex="-1" aria-label="Назад"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>
 <button type="button" class="rev-btn" data-dir="1" tabindex="-1" aria-label="Дальше"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button>
 </div>
 </div>
-<div class="shots" id="shots" role="region" aria-label="Отзывы участниц, листаются вбок" tabindex="0">
-<figure class="shot"><figcaption class="shot__tag">Тело</figcaption><p class="shot__q">«За 2 недели я заметила, что живот реально стал меньше»</p><img src="assets/img/otzyv-63.webp" width="720" height="641" alt="Отзыв участницы: За 2 недели живот стал заметно меньше" loading="lazy" decoding="async"></figure>
-<figure class="shot"><figcaption class="shot__tag">Медитации</figcaption><p class="shot__q">«Дети обожают детские медитации, они шикарные»</p><img src="assets/img/otzyv-70.webp" width="720" height="610" alt="Отзыв участницы: Засыпает под медитации, дети просят детские" loading="lazy" decoding="async"></figure>
-<figure class="shot"><figcaption class="shot__tag">Отношения</figcaption><p class="shot__q">«Отдельная благодарность за подарок &quot;игру в долгую&quot;. Все слушаю взахлёб»</p><img src="assets/img/otzyv-69.webp" width="720" height="528" alt="Отзыв участницы: Курс «Игра в долгую»: практичные советы для долгих отношений" loading="lazy" decoding="async"></figure>
-<figure class="shot"><figcaption class="shot__tag">ИИ-подружка</figcaption><p class="shot__q">«Она мне все проанализировала. По составам по бренду»</p><img src="assets/img/otzyv-52.webp" width="720" height="776" alt="Отзыв участницы: Подружка разобрала омегу по составам и брендам" loading="lazy" decoding="async"></figure>
-<figure class="shot"><figcaption class="shot__tag">Тело</figcaption><p class="shot__q">«Мне еще никогда так не хотелось заниматься спортом, тем более приседаниями!»</p><img src="assets/img/otzyv-45.webp" width="720" height="682" alt="Отзыв участницы: В 42 года впервые полюбила приседания" loading="lazy" decoding="async"></figure>
-<figure class="shot"><figcaption class="shot__tag">Сон</figcaption><p class="shot__q">«С легкостью стала вставать в 6-7 утра без пожамканого состояния»</p><img src="assets/img/otzyv-23.webp" width="720" height="640" alt="Отзыв участницы: Сон крепче, встаёт в 6-7 утра без разбитости" loading="lazy" decoding="async"></figure>
-<figure class="shot"><figcaption class="shot__tag">Тренировки</figcaption><p class="shot__q">«Впервые так сильно прочувствовала ягодицы в мостике!»</p><img src="assets/img/otzyv-36.webp" width="720" height="234" alt="Отзыв участницы: Впервые прочувствовала ягодицы в мостике" loading="lazy" decoding="async"></figure>
-<figure class="shot"><figcaption class="shot__tag">Сон</figcaption><p class="shot__q">«Моментально засыпаю»</p><img src="assets/img/otzyv-64.webp" width="720" height="433" alt="Отзыв участницы: С медитацией засыпает за пару минут" loading="lazy" decoding="async"></figure>
+<div class="shots" id="shots" role="region" aria-label="Результаты учениц, до и после, листаются вбок" tabindex="0">
+<figure class="shot dp"><div class="dp__pair"><div class="dp__ph"><img src="assets/img/dp-1-do.webp" width="600" height="800" alt="До, сбоку" loading="lazy" decoding="async"><span class="dp__lb">До</span></div><div class="dp__ph"><img src="assets/img/dp-1-posle.webp" width="600" height="800" alt="После, сбоку" loading="lazy" decoding="async"><span class="dp__lb">После</span></div></div><figcaption class="dp__q">«Мне не стыдно показывать это. Я одна из кучи женщин, которые прячутся за проблемами, но я решила, нашла в себе силы и делаю!»</figcaption></figure>
+<figure class="shot dp"><div class="dp__pair"><div class="dp__ph"><img src="assets/img/dp-2-do.webp" width="600" height="800" alt="До, спереди" loading="lazy" decoding="async"><span class="dp__lb">До</span></div><div class="dp__ph"><img src="assets/img/dp-2-posle.webp" width="600" height="800" alt="После, спереди" loading="lazy" decoding="async"><span class="dp__lb">После</span></div></div><figcaption class="dp__q">«Результат бомба, в эти джинсы я последний раз влезала около двух лет назад»</figcaption></figure>
+<figure class="shot dp"><div class="dp__pair"><div class="dp__ph"><img src="assets/img/dp-3-do.webp" width="600" height="800" alt="До, спереди" loading="lazy" decoding="async"><span class="dp__lb">До</span></div><div class="dp__ph"><img src="assets/img/dp-3-posle.webp" width="600" height="800" alt="После, спереди" loading="lazy" decoding="async"><span class="dp__lb">После</span></div></div><figcaption class="dp__q">«У меня было кесарево после вторых родов. Всё ушло, я такой красоткой себя ощущаю»</figcaption></figure>
+<figure class="shot dp"><div class="dp__pair"><div class="dp__ph"><img src="assets/img/dp-4-do.webp" width="600" height="800" alt="До, сбоку" loading="lazy" decoding="async"><span class="dp__lb">До</span></div><div class="dp__ph"><img src="assets/img/dp-4-posle.webp" width="600" height="800" alt="После, сбоку" loading="lazy" decoding="async"><span class="dp__lb">После</span></div></div><figcaption class="dp__q">«Почти 10 месяцев прошло после третьих родов, и мой животик красивый благодаря Вашим тренировкам»</figcaption></figure>
+<figure class="shot dp"><div class="dp__pair"><div class="dp__ph"><img src="assets/img/dp-5-do.webp" width="600" height="800" alt="До, сбоку" loading="lazy" decoding="async"><span class="dp__lb">До</span></div><div class="dp__ph"><img src="assets/img/dp-5-posle.webp" width="600" height="800" alt="После, сбоку" loading="lazy" decoding="async"><span class="dp__lb">После</span></div></div><figcaption class="dp__q">«Разница в весе всего 4 кг, но живот невероятно сильно ушёл»</figcaption></figure>
+<figure class="shot dp"><div class="dp__pair"><div class="dp__ph"><img src="assets/img/dp-6-do.webp" width="600" height="800" alt="До, спереди" loading="lazy" decoding="async"><span class="dp__lb">До</span></div><div class="dp__ph"><img src="assets/img/dp-6-posle.webp" width="600" height="800" alt="После, спереди" loading="lazy" decoding="async"><span class="dp__lb">После</span></div></div><span class="dp__term">за 2,5 недели</span><figcaption class="dp__q">Влезла в лыжные штаны</figcaption></figure>
+<figure class="shot dp"><div class="dp__pair"><div class="dp__ph"><img src="assets/img/dp-7-do.webp" width="600" height="800" alt="До, спереди" loading="lazy" decoding="async"><span class="dp__lb">До</span></div><div class="dp__ph"><img src="assets/img/dp-7-posle.webp" width="600" height="800" alt="После, спереди" loading="lazy" decoding="async"><span class="dp__lb">После</span></div></div><span class="dp__term">за 12 дней</span><figcaption class="dp__q">«Животик не втянут»</figcaption></figure>
+<figure class="shot dp"><div class="dp__pair"><div class="dp__ph"><img src="assets/img/dp-8-do.webp" width="600" height="800" alt="До, сбоку" loading="lazy" decoding="async"><span class="dp__lb">До</span></div><div class="dp__ph"><img src="assets/img/dp-8-posle.webp" width="600" height="800" alt="После, сбоку" loading="lazy" decoding="async"><span class="dp__lb">После</span></div></div><figcaption class="dp__q">«Животик не так выпирает сейчас»</figcaption></figure>
 </div>
-<div class="wrap"><p class="rev-note">Каждый отзыв написала такая же занятая женщина, следующий отзыв может быть твоим.</p></div>
+<div class="wrap"><p class="rev-note">Результаты у всех разные</p></div>
+<div class="wrap"><h3 class="rev-sub" id="rev2-h">Что ещё пишут ученицы</h3></div>
+<div class="shots shots--more" role="region" aria-labelledby="rev2-h" tabindex="0">
+<figure class="shot"><figcaption class="shot__tag">Сон</figcaption><p class="shot__q">«С легкостью стала вставать в 6-7 утра без пожамканого состояния»</p><img src="assets/img/otzyv-23.webp" width="720" height="640" alt="Отзыв участницы: Сон крепче, встаёт в 6-7 утра без разбитости" loading="lazy" decoding="async"></figure>
+<figure class="shot"><figcaption class="shot__tag">Сон</figcaption><p class="shot__q">«Моментально засыпаю»</p><img src="assets/img/otzyv-64.webp" width="720" height="433" alt="Отзыв участницы: С медитацией засыпает за пару минут" loading="lazy" decoding="async"></figure>
+<figure class="shot"><figcaption class="shot__tag">Отношения</figcaption><p class="shot__q">«Отдельная благодарность за подарок &quot;игру в долгую&quot;. Все слушаю взахлёб»</p><img src="assets/img/otzyv-69.webp" width="720" height="528" alt="Отзыв участницы: Курс «Игра в долгую»: практичные советы для долгих отношений" loading="lazy" decoding="async"></figure>
+</div>
 </section>
 
 <section class="section" aria-labelledby="irena-h">
