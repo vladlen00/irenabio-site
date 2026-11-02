@@ -157,6 +157,8 @@ p{margin:0;text-wrap:pretty}
 .dp__term{align-self:flex-start;margin-top:12px;padding:4px 12px;border-radius:999px;background:var(--accent);color:#fff;font-size:13px;font-weight:600;white-space:nowrap}
 .dp__term+.dp__q{margin-top:10px}
 .dp__msg{margin-top:14px}
+/* Заголовок «Результаты учениц» в одну строку на 320-340 px (02.11.2026) */
+@media (max-width:340px){#rev-h{font-size:28px}}
 /* Лента отзывов: высоту ставит скрипт по карточкам на экране, остальное обрезается до подъезда */
 .shots{overflow-y:hidden;transition:height .25s ease}
 @media (prefers-reduced-motion:reduce){.shots{transition:none}}
@@ -385,7 +387,7 @@ if (window.YM_COUNTER) {
 <div class="wrap rev-head">
 <div>
 <div class="kicker">Отзывы</div>
-<h2 class="h2" id="rev-h">Результаты учениц Ирены</h2>
+<h2 class="h2" id="rev-h">Результаты учениц</h2>
 </div>
 <div class="rev-nav" aria-hidden="true">
 <button type="button" class="rev-btn" data-dir="-1" tabindex="-1" aria-label="Назад"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>
