@@ -93,6 +93,10 @@
         <span class="rleft"><span class="rname">Проверка 9</span><span class="rdet"></span></span>
         <span class="rstat"><span class="icon"></span><span class="dot"></span></span>
       </div>
+      <div class="row" data-k="12">
+        <span class="rleft"><span class="rname">Запасной путь 3</span><span class="rdet"></span></span>
+        <span class="rstat"><span class="icon"></span><span class="dot"></span></span>
+      </div>
       <div class="row" data-k="10">
         <span class="rleft"><span class="rname">Проверка 10</span><span class="rdet">нажмите кнопку ниже</span></span>
         <span class="rstat"><span class="icon"></span><span class="dot"></span></span>
@@ -134,7 +138,9 @@
     //   6 = библиотека, без которой вход в приложение не собирается вообще (200),
     //   7 = хостинг мини-приложений (200),
     //   8 = видео-хостинг, тот же адрес встраивания, что в приложении (403),
-    //   9 = второй узел раздачи звука (403 без подписи).
+    //   9 = второй узел раздачи звука (403 без подписи),
+    //   12 = те же функции бэкенда, что в 4, но через наш российский сервер (штатно 405).
+    //        Не /ping: у него нет CORS-заголовка, в браузере это был бы ложный провал.
     // Для 4-9 меряем не бизнес-логику, а факт достижимости: 403 и 405 - это успех,
     // потому что сервер ответил.
     //
@@ -167,7 +173,8 @@
         { k:6, url: "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" },
         { k:7, url: "https://vladlen00.github.io/studio/" },
         { k:8, url: "https://kinescope.io/embed/uubwddwtUe1wCwxekvoSnC" },
-        { k:9, url: "https://s3.twcstorage.ru/irenabio-audio/sprints/test/day1.m4a" }
+        { k:9, url: "https://s3.twcstorage.ru/irenabio-audio/sprints/test/day1.m4a" },
+        { k:12, url: "https://sb-ru.irenabio.com/sb/functions/v1/verify-access-web" }
       ];
     }
 
